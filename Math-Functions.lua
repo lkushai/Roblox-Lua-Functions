@@ -8,3 +8,12 @@ local function ReverseClamp(Number,Min,Max)
 	end
 end
 
+local function ChanceNegativeRandom(Min,Max)
+	local RandomNum = math.random(Min,Max)
+
+	if math.random(0,1) == 0 then
+		return -RandomNum
+	else
+		return RandomNum
+	end
+end
