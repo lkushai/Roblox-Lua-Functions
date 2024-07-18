@@ -14,7 +14,7 @@ local function Atan3D(Position1, Position2)
 end
 
 -- Converts yaw, pitch and magnitude into a vector.
-local function YawPitchToPos(Angle,Magnitude)
+local function YawPitchToPos(Angle, Magnitude)
 	local RadX, RadY = math.rad(Angle.X), math.rad(Angle.Y)
 
 	local CosineX, CosineY = math.cos(RadX), math.cos(RadY)
@@ -24,7 +24,7 @@ local function YawPitchToPos(Angle,Magnitude)
 	local Y = SineY
 	local Z = CosineY * SineX
 
-	local Position = Vector3.new(X,Y,Z) * Magnitude
+	local Position = Vector3.new(X, Y, Z) * Magnitude
 
 	return Position
 end
