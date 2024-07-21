@@ -1,3 +1,5 @@
+-- Sorts chunks load prioty so closer chunks load first 
+
 local function SortChunks(Chunks, PlayerChunk)
 	table.sort(Chunks, function(a, b)
 		local value1 = (PlayerChunk - a) .Magnitude
@@ -6,6 +8,8 @@ local function SortChunks(Chunks, PlayerChunk)
 		return value1 < value2
 	end)
 end
+
+-- obtains the chunk player is in based of chunk size
 
 local function GetPlayerChunk(HumanoidRootPart, ChunkSize)
 	if not HumanoidRootPart then return end
@@ -17,6 +21,8 @@ local function GetPlayerChunk(HumanoidRootPart, ChunkSize)
 
 	return Vector2.new(X, Y)
 end
+
+-- returns a array of vector2's based of the player chunk and render distance also doesnt include chunks that have been loaded
 
 local function ChunksNearPlayer(PlayerChunk, RenderDistance, LoadedChunks)
 	local ChunksNearPlayer = {}
@@ -40,6 +46,8 @@ local function ChunksNearPlayer(PlayerChunk, RenderDistance, LoadedChunks)
 	return ChunksNearPlayer
 end
 
+-- unloads chunk
+
 local function UnloadChunk(Chunk)
 	if not Chunk then return end
 
@@ -51,6 +59,8 @@ local function UnloadChunk(Chunk)
 		end
 	end
 end
+
+-- unloads all chunks based on render distance instantly
 
 local function UnloadAllChunks(PlayerChunk, RenderDistance, LoadedChunks)
 	local ChunksToUnload = {}
@@ -68,6 +78,8 @@ local function UnloadAllChunks(PlayerChunk, RenderDistance, LoadedChunks)
 	end
 end
 
+-- loads a single chunk and parents all the parts to a selected location
+
 local function LoadChunk(ChunkPosition, ChunkSize, Parent)
 	local NewChunk = Instance.new("Part")
 	NewChunk.Anchored = true
@@ -78,6 +90,8 @@ local function LoadChunk(ChunkPosition, ChunkSize, Parent)
 
 	return NewChunk
 end
+
+-- loads all the chunks based on all the factors seen below 
 
 local function LoadAllChunks(ChunksToLoad, ChunksLoaded, ChunkSize, ChunkParent, ChunksPerFrame, HumanoidRootPart)
 	local Counter = 0
