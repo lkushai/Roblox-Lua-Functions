@@ -28,3 +28,38 @@ local function YawPitchToPos(Angle, Magnitude)
 
 	return Position
 end
+
+--triangle spawner thing (i took alot of math refrence from egomoose although i did learn how it works and i didnt copy paste a thing)
+
+local function DrawTriangle(a,b,c,Parent,T1,T2)
+	local ab, bc, ca = a - b, b - c, c - a
+	local dab, dbc, dca = ab:Dot(ab), bc:Dot(bc), ca:Dot(ca)
+
+	if dbc > dca and dbc > dab then
+		a, b, c = b, c, a
+	elseif dca > dab and dca > dbc then
+		a, b, c = c, a, b
+	end
+	
+	ab, bc, ca = a - b, b - c, c - a
+
+	local Right = ab:Cross(bc).Unit
+	local Up = Right:Cross(ab).Unit
+	local Back = ab.Unit
+
+	local H = math.abs(bc:Dot(Up))
+
+	if not T1 then
+		T1 = SpawnTriangle(Parent,(b + c) / 2, Right, -Up, Back, Vector3.new(1,H,math.abs(ab:Dot(Back))))
+		T2 = SpawnTriangle(Parent,(a + c) / 2, -Right, -Up, -Back, Vector3.new(1,H,math.abs(ca:Dot(Back))))
+	end
+
+	T1.CFrame = CFrame.fromMatrix((b + c) / 2, Right, -Up, Back)
+	T1.Size = Vector3.new(1,H,math.abs(bc:Dot(Back)))
+
+	T2.CFrame = CFrame.fromMatrix((a + c) / 2, -Right, -Up, -Back)
+	T2.Size = Vector3.new(1,H,math.abs(ca:Dot(Back)))
+
+	return T1, T2
+end
+
