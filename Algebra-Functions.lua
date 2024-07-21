@@ -30,6 +30,9 @@ local function YawPitchToPos(Angle, Magnitude)
 end
 
 --triangle spawner thing (i took alot of math refrence from egomoose although i did learn how it works and i didnt copy paste a thing)
+local Triangle = Instance.new("Part")
+Triangle.Shape = Enum.PartType.Wedge
+Triangle.Anchored = true
 
 local function DrawTriangle(a,b,c,Parent,T1,T2)
 	local ab, bc, ca = a - b, b - c, c - a
@@ -40,7 +43,7 @@ local function DrawTriangle(a,b,c,Parent,T1,T2)
 	elseif dca > dab and dca > dbc then
 		a, b, c = c, a, b
 	end
-	
+
 	ab, bc, ca = a - b, b - c, c - a
 
 	local Right = ab:Cross(bc).Unit
@@ -50,15 +53,18 @@ local function DrawTriangle(a,b,c,Parent,T1,T2)
 	local H = math.abs(bc:Dot(Up))
 
 	if not T1 then
-		T1 = SpawnTriangle(Parent,(b + c) / 2, Right, -Up, Back, Vector3.new(1,H,math.abs(ab:Dot(Back))))
-		T2 = SpawnTriangle(Parent,(a + c) / 2, -Right, -Up, -Back, Vector3.new(1,H,math.abs(ca:Dot(Back))))
+		T1, T2 = Triangle:Clone(), Triangle:Clone()
 	end
 
-	T1.CFrame = CFrame.fromMatrix((b + c) / 2, Right, -Up, Back)
-	T1.Size = Vector3.new(1,H,math.abs(bc:Dot(Back)))
+	local Pos = (c + a) / 2
+	T1.CFrame = CFrame.lookAt(Pos,Pos+Back,-Up)
+	T1.Size = Vector3.new(1,H,math.abs(ca:Dot(Back)))
+	T1.Parent = Parent
 
-	T2.CFrame = CFrame.fromMatrix((a + c) / 2, -Right, -Up, -Back)
-	T2.Size = Vector3.new(1,H,math.abs(ca:Dot(Back)))
+	local Pos = (b + c) / 2
+	T2.CFrame = CFrame.lookAt(Pos,Pos-Back,-Up)
+	T2.Size = Vector3.new(1,H,math.abs(bc:Dot(Back)))
+	T2.Parent = Parent
 
 	return T1, T2
 end
